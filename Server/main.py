@@ -5,15 +5,11 @@ import asyncio, time
 
 app = Sanic('Main')
 
-@app.route('/send', methods=['GET'])
-async def send_get(request):
-    return await response.file('pages/submit.html')
-
-@app.route('/send', methods=['POST'])
-def send_post(request):
+@app.route('/send', methods=['GET', 'POST'])
+async def send_post(request):
     if 'msg' in request.form:
         print(request.form.get('msg'))
-    return response.redirect('/send')
+    return await response.file('pages/submit.html')
 
 @app.route('/recv')
 async def recv(request):
