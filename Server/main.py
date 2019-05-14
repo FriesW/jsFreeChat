@@ -30,6 +30,6 @@ async def recv(request):
 
 @app.route('/')
 async def index(request):
-    return await response.file('pages/chat.html')
+    return await response.file('pages/room.html')
 
 app.run('0.0.0.0', 8000)
