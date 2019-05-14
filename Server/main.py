@@ -1,26 +1,27 @@
 from sanic import Sanic
 from sanic import response
+from broadcast import Channel
 
 import asyncio, time
 
 app = Sanic('Main')
+room = Channel()
+
 
 @app.route('/send', methods=['GET', 'POST'])
 async def send_post(request):
     if 'msg' in request.form:
-        print(request.form.get('msg'))
+        room.send(request.form.get('msg'))
     return await response.file('pages/submit.html')
 
 @app.route('/recv')
 async def recv(request):
     async def fn(response):
         await response.write('<html><head></head><body>')
-        try:
+        with room.recv() as r:
             while True:
-                await response.write(str(time.time())+'<br>')
-                await asyncio.sleep(1)
-        except:
-            print('Error')
+                msg = await r.get()
+                await response.write(msg+'<br>')
     return response.stream(fn, content_type='text/html')
 
 @app.route('/')
