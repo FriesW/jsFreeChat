@@ -18,6 +18,10 @@ async def send_post(request):
 async def recv(request):
     async def fn(response):
         await response.write('<html><head></head><body>')
+        await response.write('<!-- Buffer Filler (for Firefox)\n')
+        for i in range(50):
+            await response.write('..................................................\n')
+        await response.write('-->')
         with room.recv() as r:
             while True:
                 msg = await r.get()
