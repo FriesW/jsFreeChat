@@ -40,7 +40,7 @@ async def recv(request):
         with room.recv() as r:
             while True:
                 msg = await r.get()
-                await response.write(msg+'<br>')
+                await response.write('<div class="msg">'+msg+'</div>')
 
     async def fn(response):
         await response.write(html_log)
