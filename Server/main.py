@@ -2,8 +2,6 @@ from sanic import Sanic
 from sanic import response
 from broadcast import Channel
 
-import asyncio, time
-
 with open('pages/submit.html') as f:
     html_submit = f.read()
 with open('pages/log.html') as f:
