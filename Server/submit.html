@@ -1,11 +1,35 @@
 <html>
 <head>
+
+<style>
+
+body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+}
+
+form{
+    margin: 0.5em 1em;
+    display: flex;
+}
+
+input[type='text']{
+    flex: 1;
+    margin-right: 0.5em;
+}
+
+</style>
+
 </head>
 <body>
 
 <form method="post">
-  <input type="text" name="msg">
-  <input type="submit" value="Submit">
+  <input type="text" name="msg" autocomplete="off" autofocus>
+  <input type="submit" value="Send">
 </form>
 
 </body>
