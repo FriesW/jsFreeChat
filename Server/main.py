@@ -7,7 +7,7 @@ app = Sanic('Main')
 
 @app.route('/send', methods=['GET'])
 async def send_get(request):
-    return await response.file('submit.html')
+    return await response.file('pages/submit.html')
 
 @app.route('/send', methods=['POST'])
 def send_post(request):
