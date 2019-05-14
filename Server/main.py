@@ -14,11 +14,15 @@ app = Sanic('Main')
 room = Channel()
 
 
-@app.route('/send', methods=['GET', 'POST'])
+@app.route('/send', methods=['GET'])
+def send_get(request):
+    return response.html(html_submit)
+
+@app.route('/send', methods=['POST'])
 def send_post(request):
     if 'msg' in request.form:
         room.send(request.form.get('msg'))
-    return response.html(html_submit)
+    return response.redirect('/send')
 
 @app.route('/recv')
 async def recv(request):
