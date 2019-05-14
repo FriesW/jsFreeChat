@@ -1,7 +1,7 @@
 from sanic import Sanic
 from sanic import response
 from broadcast import Channel
-
+import asyncio
 import time
 
 with open('pages/submit.html') as f:
@@ -28,15 +28,26 @@ def send_post(request):
 
 @app.route('/recv')
 async def recv(request):
-    async def fn(response):
+
+    async def ka(response):
         start = time.monotonic()
-        await response.write(html_log)
+        while True:
+            elapsed = int(time.monotonic() - start) + 15
+            await response.write('<style>#disconnect{{animation: fadein {}s steps(1, end);}}</style>'.format(elapsed))
+            await asyncio.sleep(5)
+
+    async def ms(response):
         with room.recv() as r:
             while True:
                 msg = await r.get()
-                elapsed = int(time.monotonic() - start) + 10
-                await response.write('<style>#disconnect{{animation: fadein {}s steps(1, end);}}</style>'.format(elapsed))
                 await response.write(msg+'<br>')
+
+    async def fn(response):
+        await response.write(html_log)
+        t1 = asyncio.create_task(ka(response))
+        t2 = asyncio.create_task(ms(response))
+        await t1
+        await t2
     return response.stream(fn, content_type='text/html')
 
 @app.route('/')
