@@ -1,5 +1,31 @@
 <html>
 <head>
+
+<style>
+
+body{
+    margin: 0;
+    padding: 0.25em;
+}
+
+@keyframes fadein {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+#disconnect{
+    animation: fadein 10s steps(1, end);
+    background-color: #f99090;
+    width: 100%;
+    position: fixed;
+    padding: 0.5em;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+
+</style>
+
 </head>
 <body>
 
@@ -35,3 +61,5 @@
 ....................................................................................................
 ....................................................................................................
 -->
+
+<div id="disconnect">Connection lost &rarr; <a href="/recv">Reload</a></div>

@@ -2,6 +2,8 @@ from sanic import Sanic
 from sanic import response
 from broadcast import Channel
 
+import time
+
 with open('pages/submit.html') as f:
     html_submit = f.read()
 with open('pages/log.html') as f:
@@ -27,10 +29,13 @@ def send_post(request):
 @app.route('/recv')
 async def recv(request):
     async def fn(response):
+        start = time.monotonic()
         await response.write(html_log)
         with room.recv() as r:
             while True:
                 msg = await r.get()
+                elapsed = int(time.monotonic() - start) + 10
+                await response.write('<style>#disconnect{{animation: fadein {}s steps(1, end);}}</style>'.format(elapsed))
                 await response.write(msg+'<br>')
     return response.stream(fn, content_type='text/html')
 
