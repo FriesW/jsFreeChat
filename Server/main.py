@@ -4,6 +4,20 @@ from broadcast import Channel
 import asyncio
 import time
 
+
+async def first_done(*args):
+    async def fn():
+        tasks = []
+        for p in args:
+            t = asyncio.create_task(p)
+            tasks.append(t)
+        done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        for p in pending:
+            p.cancel()
+        await asyncio.wait(tasks, return_when=asyncio.ALL_COMPLETED)
+    await asyncio.shield(fn())
+
+
 with open('pages/submit.html') as f:
     html_submit = f.read()
 with open('pages/log.html') as f:
@@ -44,10 +58,7 @@ async def recv(request):
 
     async def fn(response):
         await response.write(html_log)
-        t1 = asyncio.create_task(ka(response))
-        t2 = asyncio.create_task(ms(response))
-        await t1
-        await t2
+        await first_done( ka(response), ms(response) )
     return response.stream(fn, content_type='text/html')
 
 @app.route('/')
